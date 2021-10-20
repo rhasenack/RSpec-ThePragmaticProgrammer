@@ -57,7 +57,7 @@ module ExpenseTracker
 
     describe 'GET/expenses/:date' do
       context 'when expenses exist on the given date' do
-        let(:date) { 'some-date' }
+        let(:date) { '2017-06-10' }
         before do
           allow(ledger).to receive(:expenses_on).with(date).and_return(['expense_1', 'expense_2'])
         end
@@ -74,19 +74,17 @@ module ExpenseTracker
       end
 
       context 'when there are no expenses on the given date' do
-        let(:date) { 'some-date' }
+        let(:date) { '2017-06-10' }
         before do
-          allow(ledger).to receive(:expenses_on).with(date).and_return(DateResults.new(true, {}, nil))
+          allow(ledger).to receive(:expenses_on).with(date).and_return([])
         end
 
         it 'returns an empty array as JSON' do
-          allow(ledger).to receive(:expenses_on).with(date).and_return(DateResults.new(true, '417', nil))
           get "/expenses/#{date}"
           expect(parsed_response).to eq([])
         end
 
         it 'responds with a 200 (OK)' do
-          allow(ledger).to receive(:expenses_on).with(date).and_return(DateResults.new(true, '417', nil))
           get "/expenses/#{date}"
           expect(last_response.status).to eq(200)
         end
